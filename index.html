@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>BreakEven Lab - Smart Break-Even Point Simulator</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+	<header class="navbar">
+		<div class="nav-container">
+			<a href="#home" class="logo"><i class="fa-solid fa-chart-line"></i> BreakEven<span>Lab</span></a>
+			<nav>
+				<ul class="nav-links">
+					<li><a href="#home">Home</a></li>
+					<li><a href="#simulator">Simulator</a></li>
+					<li><a href="#results">Results</a></li>
+					<li><a href="#graphs">Graphs</a></li>
+					<li><a href="#analysis">Analysis</a></li>
+					<li><a href="#about">About Project</a></li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+
+	<main class="main-content">
+		<section id="home" class="hero-section">
+			<div class="hero-badge"><i class="fa-solid fa-lightbulb"></i> Technological Entrepreneurship Project</div>
+			<h1 class="hero-title">Smart Break-Even Point Simulator</h1>
+			<p class="hero-subtitle">Master your manufacturing economics. Evaluate production unit costs, analyze financial risks, optimize revenue targets, and dynamic break-even thresholds with precision.</p>
+			<div class="hero-cta">
+				<a href="#simulator" class="btn btn-primary"><i class="fa-solid fa-calculator"></i> Start Simulation</a>
+				<button id="loadDemoBtn" class="btn btn-outline"><i class="fa-solid fa-flask"></i> Load Sample Demo</button>
+			</div>
+			<div class="features-grid">
+				<div class="feature-card"><i class="fa-solid fa-bolt feature-icon"></i><h3>Instant Calculations</h3><p>Real-time updates of break-even units, revenue metrics, and profit/loss margins.</p></div>
+				<div class="feature-card"><i class="fa-solid fa-chart-area feature-icon"></i><h3>Interactive Charting</h3><p>Visual cost vs revenue curves clearly highlighting your financial break-even intersection.</p></div>
+				<div class="feature-card"><i class="fa-solid fa-brain feature-icon"></i><h3>Smart Diagnostics</h3><p>Automated business suggestions tailored to improve production profitability.</p></div>
+			</div>
+		</section>
+
+		<hr class="section-divider">
+
+		<div id="simulator" class="grid-2-col">
+			<section class="card input-card">
+				<h2 class="card-title"><i class="fa-solid fa-sliders"></i> Business Parameters</h2>
+				<div id="errorMessage" class="error-banner hidden"></div>
+				<form id="calculatorForm" onsubmit="return false;">
+					<div class="form-group">
+						<label for="productName">Business / Product Name</label>
+						<input type="text" id="productName" placeholder="e.g. Precision Gears Assembly" value="Precision Components">
+					</div>
+					<div class="form-grid">
+						<div class="form-group"><label for="fixedCost">Fixed Cost (₹)</label><input type="number" id="fixedCost" placeholder="80000" min="0" step="any" required><small class="help-text">Rent, machinery, salaries</small></div>
+						<div class="form-group"><label for="variableCost">Variable Cost / Unit (₹)</label><input type="number" id="variableCost" placeholder="120" min="0" step="any" required><small class="help-text">Raw material, direct power</small></div>
+					</div>
+					<div class="form-grid">
+						<div class="form-group"><label for="sellingPrice">Selling Price / Unit (₹)</label><input type="number" id="sellingPrice" placeholder="320" min="0" step="any" required><small class="help-text">Must exceed variable cost</small></div>
+						<div class="form-group"><label for="expectedSales">Expected Sales Quantity</label><input type="number" id="expectedSales" placeholder="600" min="0" step="1" required><small class="help-text">Planned production volume</small></div>
+					</div>
+					<div class="form-actions"><button type="button" id="calculateBtn" class="btn btn-primary btn-full"><i class="fa-solid fa-play"></i> Calculate</button><button type="button" id="resetBtn" class="btn btn-secondary"><i class="fa-solid fa-rotate-right"></i> Reset</button></div>
+				</form>
+			</section>
+
+			<section id="results" class="results-container">
+				<h2 class="section-heading"><i class="fa-solid fa-square-poll-vertical"></i> Simulation Results</h2>
+				<div class="results-grid">
+					<div class="metric-card highlight-card"><span class="metric-label">Break-Even Point (Units)</span><div id="resBEPUnits" class="metric-value">0 units</div><span class="metric-sub">Required production units</span></div>
+					<div class="metric-card"><span class="metric-label">Break-Even Sales Value</span><div id="resBEPSales" class="metric-value">₹0</div><span class="metric-sub">Revenue needed to cover costs</span></div>
+					<div class="metric-card"><span class="metric-label">Contribution / Unit</span><div id="resContribution" class="metric-value">₹0</div><span class="metric-sub">Selling Price - Variable Cost</span></div>
+					<div class="metric-card"><span class="metric-label">Total Revenue</span><div id="resTotalRevenue" class="metric-value">₹0</div><span class="metric-sub">At expected sales quantity</span></div>
+					<div class="metric-card"><span class="metric-label">Total Production Cost</span><div id="resTotalCost" class="metric-value">₹0</div><span class="metric-sub">Fixed Cost + Variable Costs</span></div>
+					<div id="profitCard" class="metric-card status-card"><span class="metric-label">Expected Net Profit / Loss</span><div id="resProfitLoss" class="metric-value">₹0</div><span id="resStatusBadge" class="status-badge">Awaiting Input</span></div>
+				</div>
+			</section>
+		</div>
+
+		<section id="graphs" class="card mt-2">
+			<h2 class="card-title"><i class="fa-solid fa-chart-line"></i> Financial Graphs</h2>
+			<div class="charts-wrapper"><div class="chart-container"><h3>Break-Even &amp; Cost-Revenue Analysis</h3><canvas id="breakEvenChart"></canvas></div><div class="chart-container"><h3>Profit / Loss Trajectory</h3><canvas id="profitChart"></canvas></div></div>
+		</section>
+
+		<section id="analysis" class="card mt-2">
+			<h2 class="card-title"><i class="fa-solid fa-magnifying-glass-chart"></i> Business Analysis &amp; Recommendations</h2>
+			<div id="analysisContent"><p class="placeholder-text">Run a simulation above to generate performance insights and profitability advice.</p></div>
+		</section>
+
+		<section id="about" class="card mt-2">
+			<h2 class="card-title"><i class="fa-solid fa-graduation-cap"></i> About BreakEven Lab</h2>
+			<div class="about-grid">
+				<div><h3>Project Objective</h3><p>Designed for the Technological Entrepreneurship curriculum, BreakEven Lab provides entrepreneurs and engineering managers an intuitive decision-support tool to calculate financial feasibility, assess risk, and project revenue milestones.</p><h3>Problem Statement</h3><p>Many early-stage hardware startups and manufacturing enterprises struggle to accurately quantify fixed and variable overheads. Miscalculating unit economics leads to underpriced products and unmanageable operational losses.</p></div>
+				<div><h3>Importance in Mechanical Engineering</h3><p>In manufacturing environments, break-even analysis guides crucial operational decisions such as process selection, tooling investments, batch sizing, capacity planning, and make-or-buy decisions.</p><div class="formula-box"><h4>Key Mathematical Formulas</h4><ul><li><strong>Contribution / Unit:</strong> $P - V$</li><li><strong>Break-Even Point (Units):</strong> $\frac{FC}{P - V}$</li><li><strong>Total Revenue:</strong> $P \times Q$</li><li><strong>Total Cost:</strong> $FC + (V \times Q)$</li></ul></div></div>
+			</div>
+		</section>
+	</main>
+
+	<footer class="footer"><p>&copy; 2026 BreakEven Lab | Technological Entrepreneurship Subject Project</p></footer>
+	<script src="script.js"></script>
+</body>
+</html>
